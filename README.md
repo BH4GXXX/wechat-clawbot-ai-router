@@ -2,6 +2,18 @@
 
 在微信里发任务，由注册电脑上的接入端调用本机路由器，再交给可用的 AI CLI 执行并返回结果。目标平台为 macOS 和 Windows；路由器不直接调用 AI 厂商模型 API。
 
+## 快速开始
+
+macOS 用户按 [十分钟快速安装](docs/QUICKSTART.md) 操作即可完成：克隆项目、生成本机配置、链接 OpenClaw、扫码绑定微信和发送首条任务。配置文件会自动填入本机路径，不需要复制作者电脑的目录。
+
+```sh
+git clone https://github.com/BH4GXXX/wechat-clawbot-ai-router.git
+cd wechat-clawbot-ai-router
+npm run openclaw-config
+```
+
+项目不保存 AI 账号密码、API Key、微信二维码或登录令牌；`config.json`、`*.local.json5`、运行状态和日志默认不会提交到 Git。
+
 接入微信有两条路线：
 
 | 路线 | 说明 | 文档 |
@@ -42,7 +54,7 @@ node cli.mjs run --prompt "概述当前工作目录" --session my-chat --id mess
 
 Mac 可双击 `start.command`，Windows 可双击 `start.bat` 创建配置并检查环境。AI CLI 需在本机安装并登录。
 
-[完整中文安装配置步骤](docs/INSTALLATION.md)从克隆仓库、安装 AI CLI、配置 OpenClaw、扫码绑定微信一直写到最终验收，并附当前 Mac 的实际版本和路径；[中文使用说明](docs/USAGE.md)包含配置、路由切换、任务去重、会话与故障恢复。配置字段和预设示例见 [config.example.json](config.example.json)。
+[十分钟快速安装](docs/QUICKSTART.md)适合首次部署；[完整中文安装配置步骤](docs/INSTALLATION.md)记录各工具安装、OpenClaw、扫码绑定和验收；[中文使用说明](docs/USAGE.md)包含路由切换、任务去重、会话与故障恢复。配置字段和预设示例见 [config.example.json](config.example.json)。
 
 ## 当前实现
 

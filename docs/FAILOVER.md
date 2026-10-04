@@ -228,7 +228,7 @@ node cli.mjs run --provider doubao --json --prompt "用一个例子解释什么�
 同一份 config，换个启动目录就会得到两个状态目录，表现为「冷却失效」「同一任务重复执行」「会话上下文丢失」。
 微信侧拉起进程时 cwd 不受控，这条路径迟早会踩。
 
-**本次处置**：把 `config.json` 的 `stateDir` 改成绝对路径 `/Users/amirliu/.jijin-ai-router`
+**本次处置**：把 `config.json` 的 `stateDir` 改成绝对路径 `/Users/yourname/.jijin-ai-router`
 （与 `openclaw.config.example.json5` 里的示例值、以及 `router.mjs` 缺省分支一致）。属配置修正，未动核心代码。
 **留待所有者定口径**：是否把 `router.mjs` 的相对路径基准从 `process.cwd()` 改为模块自身目录，
 让两个入口彻底一致。

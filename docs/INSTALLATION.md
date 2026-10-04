@@ -59,13 +59,13 @@ npm test
 
 ```sh
 openclaw plugins install --link --force --accept-capabilities "$PWD"
-cp openclaw.config.example.json5 /tmp/wechat-router-openclaw.json5
+npm run openclaw-config
 ```
 
-编辑 `/tmp/wechat-router-openclaw.json5`，把所有 `/Users/amirliu/...` 改为当前电脑的绝对路径，删除或禁用未安装的 provider。然后合并配置并校验：
+该命令生成被 Git 忽略的 `openclaw.generated.local.json5`，并自动写入当前项目目录、用户目录和 Node 路径。编辑该文件，把已安装的 provider 设为 `enabled: true`，其余保持 `false`；非标准安装位置只需修改对应 `command`。然后合并配置并校验：
 
 ```sh
-openclaw config patch --file /tmp/wechat-router-openclaw.json5
+openclaw config patch --file openclaw.generated.local.json5
 openclaw config validate
 ```
 
@@ -133,13 +133,13 @@ openclaw channels status --probe --json
 工程目录：
 
 ```text
-/Users/amirliu/1-Project/jijin/wechat-ai-router
+/absolute/path/to/wechat-clawbot-ai-router
 ```
 
 路由核心只使用 Node.js 内置模块，不需要执行 `npm install`。初始化和检查：
 
 ```sh
-cd /Users/amirliu/1-Project/jijin/wechat-ai-router
+cd /absolute/path/to/wechat-clawbot-ai-router
 node cli.mjs init       # 仅在没有 config.json 时执行；不会覆盖已有配置
 node cli.mjs doctor
 npm test
@@ -231,7 +231,7 @@ env CODEBUDDY_FORCE_HEADLESS_BUNDLE=1 \
 首次登录：
 
 ```sh
-cd /Users/amirliu/1-Project/jijin/wechat-ai-router
+cd /absolute/path/to/wechat-clawbot-ai-router
 codebuddy
 # 首次询问目录信任时选择 “Trust folder only”
 # 输入 /login
@@ -242,7 +242,7 @@ codebuddy
 路由器将 WorkBuddy 限制为纯模型执行器，并把每条微信任务保存为独立会话：
 
 ```text
-CODEBUDDY_CONFIG_DIR=/Users/amirliu/.workbuddy
+CODEBUDDY_CONFIG_DIR=/Users/yourname/.workbuddy
 --print --output-format text --tools '' --session-id wechat-<任务ID> --max-turns 1
 ```
 
@@ -306,7 +306,7 @@ OpenClaw 要求 Node.js `>=24.16.0 <25` 或 `>=26.1.0`，因此没有使用现�
 ~/.local/node/current/bin/openclaw channels login \
   --channel openclaw-weixin --account default --verbose
 ~/.local/node/current/bin/openclaw daemon install --runtime node \
-  --runtime-path /Users/amirliu/.local/node/current/bin/node
+  --runtime-path /Users/yourname/.local/node/current/bin/node
 ```
 
 扫码成功后凭据由微信插件单独保存，不要复制到仓库。检查常驻服务：

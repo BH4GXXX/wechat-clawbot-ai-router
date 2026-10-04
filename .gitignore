@@ -2,8 +2,16 @@ node_modules/
 .env
 .env.*
 !.env.example
+.npmrc
+*.pem
+*.key
+*.p12
+*.pfx
+credentials*.json
+secrets*.json
 config.json
 *.local.json
+*.local.json5
 *.log
 .DS_Store
 __pycache__/

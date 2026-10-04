@@ -22,6 +22,7 @@
     "check-tools": "node scripts/check-tools.mjs",
     "check-live": "node scripts/check-tools.mjs --live",
     "check-failover": "node scripts/check-tools.mjs --failover",
+    "openclaw-config": "node scripts/render-openclaw-config.mjs",
     "try-codex": "node scripts/try-codex.mjs",
     "start": "node cli.mjs",
     "verify": "node scripts/verify.mjs"

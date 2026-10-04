@@ -25,7 +25,7 @@
 ```json
 {
   "nodeBinary": "/opt/homebrew/bin/node",
-  "routerRoot": "/Users/amirliu/1-Project/jijin/wechat-ai-router",
+  "routerRoot": "/absolute/path/to/wechat-clawbot-ai-router",
   "configFile": "config.json"
 }
 ```
@@ -49,7 +49,7 @@
 WorkBuddy 2.147.0 自带的无界面 CLI 可以执行 `--print`，但应用包缺少交互终端文件，直接启动会报 `Cannot find module '../dist/codebuddy'`。已使用其官方 `install latest` 子命令安装完整 CLI 2.160.0：
 
 ```text
-/Users/amirliu/.local/bin/codebuddy
+/Users/yourname/.local/bin/codebuddy
 ```
 
 2026-10-03 已完成以下验证：
@@ -58,9 +58,9 @@ WorkBuddy 2.147.0 自带的无界面 CLI 可以执行 `--print`，但应用包�
 - 用 `--print --tools '' --max-turns 1` 发起最小调用，退出码为 0，模型 `Hy4 preview` 返回 `WORKBUDDY_OK`，无工具调用和权限拒绝。
 - 已作为 `workbuddy` provider 加入 `config.json`，优先级 18，排在 DeepSeek 与豆包之间。
 
-WorkBuddy 客户端的登录/微信绑定不会自动共享给 CLI，所以首次使用仍需单独 `/login`。路由器固定传入 `--tools ''`，将它限制为纯模型执行器，避免它再次调用 `local-ai-router` 技能形成递归，并限制为一轮。会话持久化已经启用：每条路由任务使用 `wechat-<任务ID>` 作为 WorkBuddy Session ID，`CODEBUDDY_CONFIG_DIR` 指向 `/Users/amirliu/.workbuddy`，因此记录进入桌面端使用的任务库，而不是 CLI 默认的 `.codebuddy`。
+WorkBuddy 客户端的登录/微信绑定不会自动共享给 CLI，所以首次使用仍需单独 `/login`。路由器固定传入 `--tools ''`，将它限制为纯模型执行器，避免它再次调用 `local-ai-router` 技能形成递归，并限制为一轮。会话持久化已经启用：每条路由任务使用 `wechat-<任务ID>` 作为 WorkBuddy Session ID，`CODEBUDDY_CONFIG_DIR` 指向 `/Users/yourname/.workbuddy`，因此记录进入桌面端使用的任务库，而不是 CLI 默认的 `.codebuddy`。
 
-2026-10-03 的最小验证创建了 `wechat-workbuddy-shared-visible-20261003`，返回 `WORKBUDDY_SHARED_VISIBLE_OK`；对应会话文件、用户任务、推理和回复均已写入 `.workbuddy/projects/Users-amirliu-1-Project-jijin-wechat-ai-router/`。
+2026-10-03 的最小验证创建了 `wechat-workbuddy-shared-visible-20261003`，返回 `WORKBUDDY_SHARED_VISIBLE_OK`；对应会话文件、用户任务、推理和回复均已写入 WorkBuddy 的 `.workbuddy/projects/` 目录。
 
 ## DeepSeek Harness 接入说明
 

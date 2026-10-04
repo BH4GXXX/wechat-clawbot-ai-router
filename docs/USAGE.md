@@ -34,7 +34,7 @@ node cli.mjs status
 
 ## 3. 接入电脑端 ClawBot
 
-已有 OpenClaw：参考 `openclaw.config.example.json5`，合并插件配置、修改绝对路径，将该 Agent 的默认模型设为 `jijin-ai-router/auto`，再重启 Gateway。现有微信通道继续处理收发消息。该插件已在 OpenClaw 2026.9.8 中完成实际调用，返回 `OPENCLAW_ROUTER_OK`。OpenClaw 模式由其传入历史上下文，独立入口的 `--session` 不适用于此模式。
+已有 OpenClaw：运行 `npm run openclaw-config` 生成带本机绝对路径的 `openclaw.generated.local.json5`，启用已安装的 provider 后合并配置，将该 Agent 的默认模型设为 `jijin-ai-router/auto`，再重启 Gateway。现有微信通道继续处理收发消息。该插件已在 OpenClaw 2026.9.8 中完成实际调用，返回 `OPENCLAW_ROUTER_OK`。OpenClaw 模式由其传入历史上下文，独立入口的 `--session` 不适用于此模式。
 
 其他接入程序：调用本地进程 `node /绝对路径/cli.mjs run --config /绝对路径/config.json --json`，通过 stdin 写入一个 JSON 对象并关闭 stdin：
 
@@ -109,7 +109,7 @@ provider 的 `args` 还支持 `{taskId}`、`{sessionId}`、`{nativeSessionId}` �
 
 独立入口默认在配置旁的 `.router-state` 保存健康状态、任务结果和可选会话历史。插件默认写到用户目录的 `.jijin-ai-router`。这些内容可能包含私密对话，请保留在本机。当前没有自动过期清理；删除结果记录会失去对应任务的去重能力。
 
-> **本机已把 `stateDir` 显式设为绝对路径 `/Users/amirliu/.jijin-ai-router`**（不再依赖上面那个"相对配置目录"的默认值）。
+> **本机已把 `stateDir` 显式设为绝对路径 `/Users/yourname/.jijin-ai-router`**（不再依赖上面那个"相对配置目录"的默认值）。
 > 原因是 `router.mjs` 这条入口用 `process.cwd()` 解析相对路径：同一份 config 换个启动目录就会落到不同状态目录，
 > 冷却与去重会静默失效。取舍与复现见 [FAILOVER.md](FAILOVER.md) §4.5。
 

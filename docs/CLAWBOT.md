@@ -79,9 +79,9 @@ openclaw --version
 
 Homebrew 的 `/opt/homebrew/opt/node`（23.7.0）**保持不动**，因为下面豆包 provider 依赖它。
 
-然后把 `openclaw.config.example.json5` 的内容**合并**进 OpenClaw 现有配置
-（不要覆盖微信通道那部分）。示例里已经写好三个 provider 的绝对路径、只读/云端的权限设置、
-以及 `retrySafe` 与错误模式表——这些口径的理由见 `docs/FAILOVER.md`。
+先运行 `npm run openclaw-config`，它会把模板中的占位符替换为当前电脑的绝对路径，生成被 Git 忽略的
+`openclaw.generated.local.json5`。启用已安装的 provider，再把该文件**合并**进 OpenClaw 现有配置
+（不要覆盖微信通道部分）。模板已经写好权限设置、`retrySafe` 与错误模式表——这些口径的理由见 `docs/FAILOVER.md`。
 
 关键一行是：
 
@@ -94,9 +94,9 @@ agents: { defaults: { model: { primary: "jijin-ai-router/auto" } } }
 本机实际执行了插件链接、配置合并和本地模型验证：
 
 ```sh
-openclaw plugins install --link --force --accept-capabilities \
-  /Users/amirliu/1-Project/jijin/wechat-ai-router
-openclaw config patch < openclaw.config.example.json5
+openclaw plugins install --link --force --accept-capabilities "$PWD"
+npm run openclaw-config
+openclaw config patch --file openclaw.generated.local.json5
 openclaw agent --local --session-id router-openclaw-verification-20261003 \
   --message "只回复 OPENCLAW_ROUTER_OK，不要调用任何工具。" --json
 ```
@@ -119,7 +119,7 @@ openclaw channels login --channel openclaw-weixin --account default --verbose
 
 ```sh
 openclaw daemon install --runtime node \
-  --runtime-path /Users/amirliu/.local/node/current/bin/node
+  --runtime-path /Users/yourname/.local/node/current/bin/node
 openclaw gateway status --json
 openclaw channels status --probe --json
 ```

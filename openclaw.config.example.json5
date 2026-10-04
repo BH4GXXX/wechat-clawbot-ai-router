@@ -1,4 +1,5 @@
-// 合并进现有 OpenClaw 配置；不要覆盖微信通道配置。
+// 模板文件：先运行 npm run openclaw-config 生成本机配置，不要直接应用本文件。
+// 将生成文件合并进现有 OpenClaw 配置；不要覆盖微信通道配置。
 //
 // 这是「微信 ClawBot → 本机路由器 → 本机 AI」的直连写法：
 // 微信消息被当成一次模型调用，直接交给 router.mjs，中间没有任何模型参与。
@@ -8,7 +9,7 @@
     load: {
       paths: [
         // 指向本机路由器目录（含 index.mjs / openclaw.plugin.json 的目录）
-        "/Users/amirliu/1-Project/jijin/wechat-ai-router",
+        "__ROUTER_ROOT__",
       ],
     },
     entries: {
@@ -21,29 +22,32 @@
           // 任一 AI 未成功返回时继续下一个；只有用户主动取消才停止
           failoverPolicy: "availability-first",
           // 状态目录由 OpenClaw 进程自己创建，不要指向 WorkBuddy 的会话目录
-          stateDir: "/Users/amirliu/.jijin-ai-router",
+          stateDir: "__HOME__/.jijin-ai-router",
           providers: [
             {
               name: "codex",
+              enabled: true,
               preset: "codex",
               command: "/Applications/ChatGPT.app/Contents/Resources/codex-cli/bin/codex",
               args: ["exec", "--json", "--skip-git-repo-check", "-s", "read-only", "-"],
               persistTask: true,
               taskLabel: "微信 ClawBot 任务",
               priority: 10,
-              cwd: "/Users/amirliu/1-Project/jijin/wechat-ai-router",
+              cwd: "__ROUTER_ROOT__",
               // 结构化事件流 60 秒没有进展且尚未调用工具时，安全切换到下一个 AI
               idleTimeoutSeconds: 60,
               timeoutSeconds: 300,
             },
             {
               name: "deepseek",
+              // 安装并登录 DeepSeek Harness 后改成 true
+              enabled: false,
               command: "/Applications/DeepSeek Harness.app/Contents/Resources/runtime/cli/bin/dsh",
               args: [
                 "--profile",
                 "headless",
                 "--patch",
-                "/Users/amirliu/1-Project/jijin/wechat-ai-router/adapters/dsh-headless-account.yml",
+                "__ROUTER_ROOT__/adapters/dsh-headless-account.yml",
                 "-",
               ],
               env: { DSH_PERMISSION_MODE: "read-only" },
@@ -60,12 +64,14 @@
                 "\\b429\\b", "\\b503\\b", "额度(?:不足|耗尽|用完)", "限流", "服务暂不可用",
               ],
               priority: 15,
-              cwd: "/Users/amirliu/1-Project/jijin/wechat-ai-router",
+              cwd: "__ROUTER_ROOT__",
               timeoutSeconds: 300,
             },
             {
               name: "workbuddy",
-              command: "/Users/amirliu/.local/bin/codebuddy",
+              // 安装并登录 CodeBuddy CLI 后改成 true
+              enabled: false,
+              command: "__HOME__/.local/bin/codebuddy",
               args: [
                 "--print", "--output-format", "text", "--tools", "",
                 "--session-id", "{nativeSessionId}", "--max-turns", "1",
@@ -74,7 +80,7 @@
               input: "arg",
               output: "text",
               // 与 WorkBuddy 桌面端共用会话目录，任务会进入桌面端使用的记录库
-              env: { CODEBUDDY_CONFIG_DIR: "/Users/amirliu/.workbuddy" },
+              env: { CODEBUDDY_CONFIG_DIR: "__HOME__/.workbuddy" },
               persistTask: true,
               taskLabel: "微信 ClawBot 任务",
               retrySafe: true,
@@ -85,19 +91,21 @@
                 "\\b429\\b", "\\b503\\b", "额度(?:不足|耗尽|用完)", "限流", "服务暂不可用",
               ],
               priority: 18,
-              cwd: "/Users/amirliu/1-Project/jijin/wechat-ai-router",
+              cwd: "__ROUTER_ROOT__",
               timeoutSeconds: 300,
             },
             {
               name: "doubao",
-              command: "/opt/homebrew/opt/node/bin/node",
+              // 安装 doubao-cli 并开启 CDP 后改成 true
+              enabled: false,
+              command: "__NODE_BINARY__",
               args: [
-                "/Users/amirliu/1-Project/jijin/wechat-ai-router/adapters/doubao.mjs",
+                "__ROUTER_ROOT__/adapters/doubao.mjs",
                 "--runtime",
                 "cloud",
               ],
               env: {
-                DOUBAO_CLI: "/Users/amirliu/.local/bin/doubao",
+                DOUBAO_CLI: "__HOME__/.local/bin/doubao",
                 DOUBAO_CLI_DISABLE_AUTO_UPDATE: "1",
               },
               input: "stdin",
@@ -113,7 +121,7 @@
                 "CDP is unavailable", "cdp launch", "找不到 doubao 命令",
               ],
               priority: 20,
-              cwd: "/Users/amirliu/1-Project/jijin/wechat-ai-router",
+              cwd: "__ROUTER_ROOT__",
               timeoutSeconds: 300,
             },
           ],
