@@ -1,0 +1,15 @@
+# dsh headless profile 的模型补丁：把 provider 从默认的 deepseek-official
+# 换成 deepseek-account —— 前者要求 DEEPSEEK_API_KEY，后者复用桌面客户端的
+# 登录态（~/.dsh/.credentials.yaml），因此无需在路由器里搬运任何密钥。
+#
+# 用法（由 config.json 的 deepseek provider 自动传入）：
+#   dsh --profile headless --patch <本文件绝对路径> -
+#
+# 保留 headless 自带的沙箱与权限预设；权限模式由环境变量
+# DSH_PERMISSION_MODE 控制（路由器配置为 read-only）。
+- id: agent-default-model
+  name: "@deepseek-ai/dsh-agent-default-model"
+  config:
+    provider: deepseek-account
+    model: deepseek-flash
+    reasoningEffort: high

@@ -1,0 +1,37 @@
+{
+  "name": "@jijin/openclaw-ai-router",
+  "version": "0.3.0",
+  "private": true,
+  "type": "module",
+  "description": "Local CLI failover backend for WeChat ClawBot via OpenClaw",
+  "peerDependencies": {
+    "openclaw": ">=2026.3.24"
+  },
+  "openclaw": {
+    "extensions": [
+      "./index.mjs"
+    ],
+    "compat": {
+      "pluginApi": ">=2026.3.24",
+      "minGatewayVersion": "2026.3.24"
+    }
+  },
+  "scripts": {
+    "test": "node --test tests/*.test.mjs",
+    "doctor": "node cli.mjs doctor",
+    "check-tools": "node scripts/check-tools.mjs",
+    "check-live": "node scripts/check-tools.mjs --live",
+    "check-failover": "node scripts/check-tools.mjs --failover",
+    "try-codex": "node scripts/try-codex.mjs",
+    "start": "node cli.mjs",
+    "verify": "node scripts/verify.mjs"
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "peerDependenciesMeta": {
+    "openclaw": {
+      "optional": true
+    }
+  }
+}

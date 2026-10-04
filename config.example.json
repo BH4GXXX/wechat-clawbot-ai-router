@@ -1,0 +1,9 @@
+{
+  "stateDir": ".router-state",
+  "cooldownSeconds": 60,
+  "failoverPolicy": "availability-first",
+  "providers": [
+    {"name":"codex","preset":"codex","enabled":true,"priority":10,"cwd":".","idleTimeoutSeconds":60,"timeoutSeconds":300},
+    {"name":"claude","preset":"claude","enabled":true,"priority":20,"cwd":".","idleTimeoutSeconds":60,"timeoutSeconds":300}
+  ]
+}

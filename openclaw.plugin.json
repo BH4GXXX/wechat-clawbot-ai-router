@@ -1,0 +1,140 @@
+{
+  "id": "jijin-ai-router",
+  "name": "Jijin Local AI Router",
+  "description": "Routes WeChat ClawBot requests through local AI CLI programs with failover",
+  "cliBackends": [
+    "jijin-ai-router"
+  ],
+  "setup": {
+    "cliBackends": [
+      "jijin-ai-router"
+    ],
+    "requiresRuntime": false
+  },
+  "activation": {
+    "onStartup": false
+  },
+  "configSchema": {
+    "type": "object",
+    "additionalProperties": false,
+    "required": [
+      "providers"
+    ],
+    "properties": {
+      "cooldownSeconds": {
+        "type": "integer",
+        "minimum": 0,
+        "default": 60
+      },
+      "failoverPolicy": {
+        "type": "string",
+        "enum": ["safe", "availability-first"],
+        "default": "availability-first",
+        "description": "availability-first tries the next provider after every provider failure except explicit cancellation"
+      },
+      "providers": {
+        "type": "array",
+        "minItems": 1,
+        "items": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "name"
+          ],
+          "properties": {
+            "name": {
+              "type": "string",
+              "minLength": 1
+            },
+            "enabled": {
+              "type": "boolean"
+            },
+            "priority": {
+              "type": "integer"
+            },
+            "command": {
+              "type": "string",
+              "minLength": 1
+            },
+            "args": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "cwd": {
+              "type": "string",
+              "description": "Optional working directory for this CLI"
+            },
+            "env": {
+              "type": "object",
+              "additionalProperties": {
+                "type": "string"
+              },
+              "description": "Environment variable overrides for this CLI"
+            },
+            "model": {
+              "type": "string"
+            },
+            "modelArg": {
+              "type": "string"
+            },
+            "input": {
+              "type": "string",
+              "enum": [
+                "stdin",
+                "arg"
+              ]
+            },
+            "output": {
+              "type": "string",
+              "enum": [
+                "text",
+                "json",
+                "codex-jsonl",
+                "claude-jsonl"
+              ]
+            },
+            "timeoutSeconds": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "idleTimeoutSeconds": {
+              "type": "integer",
+              "minimum": 1,
+              "description": "For structured JSONL CLIs, switch only after this many seconds without progress and only if no local tool ran"
+            },
+            "retryPatterns": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              }
+            },
+            "preset": {
+              "type": "string",
+              "enum": [
+                "codex",
+                "claude"
+              ]
+            },
+            "retrySafe": {
+              "type": "boolean"
+            },
+            "persistTask": {
+              "type": "boolean",
+              "description": "Prefix the prompt with a visible task label and retain the provider-native task/session"
+            },
+            "taskLabel": {
+              "type": "string",
+              "minLength": 1,
+              "maxLength": 80
+            }
+          }
+        }
+      },
+      "stateDir": {
+        "type": "string"
+      }
+    }
+  }
+}

@@ -1,0 +1,5 @@
+{
+  "nodeBinary": "/absolute/path/to/node",
+  "routerRoot": "/absolute/path/to/wechat-ai-router",
+  "configFile": "/absolute/path/to/wechat-ai-router/config.json"
+}
